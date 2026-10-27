@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090b12">
+<title>TikTok LIVE Conector</title>
+<style>
+:root{color-scheme:dark;--bg:#090b12;--panel:#121622;--line:#272d3b;--muted:#9ba5b8;--text:#f4f6fb;--pink:#ff3b78;--cyan:#36d9e8;--green:#38d996}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#26203e 0,transparent 55%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+main{max-width:1100px;margin:auto;padding:24px 16px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--pink));display:grid;place-items:center;font-size:22px;font-weight:900;color:#090b12;box-shadow:0 0 30px #ff3b7830}.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:.16em;font-weight:800;text-transform:uppercase}.brand h1{font-size:clamp(20px,4vw,28px);margin:1px 0 0}.pill{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:99px;padding:8px 12px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:#788196}.dot.live{background:var(--green);box-shadow:0 0 12px #38d99680}.hero{border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,30px);background:linear-gradient(145deg,#171b2a,#10131c 72%);margin-bottom:18px}.hero h2{font-size:clamp(22px,5vw,34px);line-height:1.12;margin:0 0 10px}.hero p{color:var(--muted);max-width:650px;margin:0}.grid{display:grid;grid-template-columns: minmax(0,1fr) minmax(0,1.2fr);gap:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}.panel h3{margin:0 0 16px;font-size:16px}.field{display:grid;gap:7px;margin-bottom:14px}.field label{font-size:12px;color:#c3cada;font-weight:700}.field input{width:100%;min-width:0;border:1px solid #343b4b;border-radius:11px;background:#0b0e16;color:var(--text);padding:12px 13px;font:inherit;outline:none}.field input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #36d9e81a}.hint{font-size:12px;color:var(--muted);margin-top:-5px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.btn{border:0;border-radius:11px;padding:12px 16px;font-weight:800;font:inherit;cursor:pointer}.primary{background:linear-gradient(100deg,var(--cyan),#9ef3df);color:#081014}.secondary{background:#222838;color:var(--text);border:1px solid #343b4b}.btn:disabled{opacity:.45;cursor:not-allowed}.notice{font-size:12px;color:#b4bed0;background:#0b0e16;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:16px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}.stat{background:#0b0e16;border:1px solid var(--line);border-radius:13px;padding:12px}.stat span{display:block;color:var(--muted);font-size:11px}.stat strong{font-size:23px}.events{height:300px;overflow:auto;display:flex;flex-direction:column;gap:8px}.empty{margin:auto;text-align:center;color:var(--muted);font-size:13px;padding:30px 10px}.event{border:1px solid var(--line);background:#0d111a;border-radius:11px;padding:10px 12px;overflow-wrap:anywhere}.event small{display:block;color:var(--muted);font-size:10px;margin-bottom:3px}.event b{color:var(--cyan)}.event.gift b{color:#ff80aa}.event.error b{color:#ff9c9c}.foot{color:#727e94;text-align:center;font-size:11px;margin-top:20px}
+@media(max-width:760px){main{padding:16px 12px 32px}.grid{grid-template-columns:1fr}.events{height:250px}.stats{gap:7px}.stat{padding:10px}.stat strong{font-size:20px}}
+</style>
+</head>
+<body>
+<main>
+<header class="top"><div class="brand"><div class="logo">LIVE</div><div><div class="eyebrow">REAL-TIME CONNECTOR</div><h1>TikTok LIVE Conector</h1></div></div><div class="pill"><span id="statusDot" class="dot"></span><span id="statusText">Desconectado</span></div></header>
+<section class="hero"><div class="eyebrow">CENTRAL DE CONEXÃO</div><h2>Os eventos da sua LIVE,<br>em um só painel.</h2><p>Configure o usuário e o endereço do gateway para acompanhar mensagens, presentes, curtidas e entradas em tempo real.</p></section>
+<div class="grid">
+<section class="panel"><h3>⚙️ Configuração</h3>
+<div class="field"><label for="username">Usuário do TikTok</label><input id="username" autocomplete="off" placeholder="@seu_usuario" value=""></div>
+<div class="field"><label for="gateway">URL do WebSocket gateway</label><input id="gateway" autocomplete="url" placeholder="wss://seu-servidor/gateway"></div>
+<div class="hint">Use o endereço WebSocket fornecido pelo seu backend. Não coloque chaves secretas da API neste campo.</div>
+<div class="actions"><button id="connectBtn" class="btn primary">Conectar à LIVE</button><button id="disconnectBtn" class="btn secondary" disabled>Desconectar</button></div>
+<div class="notice"><b>Importante:</b> a interface não confirma uma LIVE ativa sozinha. O status só muda para conectado quando o WebSocket realmente abrir. A integração Tik.Tools precisa de um gateway compatível no servidor.</div>
+</section>
+<section class="panel"><h3>📡 Eventos em tempo real</h3><div class="stats"><div class="stat"><span>Comentários</span><strong id="chatCount">0</strong></div><div class="stat"><span>Presentes</span><strong id="giftCount">0</strong></div><div class="stat"><span>Curtidas</span><strong id="likeCount">0</strong></div></div><div id="events" class="events" aria-live="polite"><div class="empty" id="empty">Aguardando conexão.<br>Os eventos recebidos aparecerão aqui.</div></div><div class="actions"><button id="clearBtn" class="btn secondary">Limpar eventos</button></div></section>
+</div><div class="foot">TikTok LIVE Conector • Painel experimental • Não oficial do TikTok</div>
+</main>
+<script>
+(() => {
+ const $ = id => document.getElementById(id);
+ let socket = null, counts = {chat:0,gift:0,like:0};
+ const setStatus = (text, live=false) => { $('statusText').textContent=text; $('statusDot').classList.toggle('live',live); };
+ const renderCounts = () => { $('chatCount').textContent=counts.chat; $('giftCount').textContent=counts.gift; $('likeCount').textContent=counts.like; };
+ function addEvent(type, title, detail='') {
+   const empty=$('empty'); if(empty) empty.remove();
+   const item=document.createElement('div'); item.className='event '+(type==='gift'?'gift':type==='error'?'error':'');
+   const time=document.createElement('small'); time.textContent=new Date().toLocaleTimeString('pt-BR');
+   const heading=document.createElement('b'); heading.textContent=title;
+   const body=document.createElement('div'); body.textContent=detail;
+   item.append(time,heading,body); $('events').prepend(item);
+   while($('events').children.length>100) $('events').lastElementChild.remove();
+ }
+ function classify(data) {
+   const type=String(data?.event || data?.type || data?.eventType || '').toLowerCase();
+   if(type.includes('gift')) counts.gift++;
+   else if(type.includes('like')) counts.like++;
+   else if(type.includes('chat') || type.includes('comment') || type.includes('message')) counts.chat++;
+   renderCounts();
+   const label=type || 'evento';
+   const user=data?.user?.nickname || data?.nickname || data?.uniqueId || data?.username || 'Usuário';
+   const detail=data?.comment || data?.message || data?.giftName || data?.gift?.name || data?.text || JSON.stringify(data);
+   addEvent(label, user, String(detail ?? '').slice(0,600));
+ }
+ function disconnect() {
+   if(socket){ socket.onopen=null; socket.onmessage=null; socket.onerror=null; socket.onclose=null; socket.close(); socket=null; }
+   setStatus('Desconectado'); $('connectBtn').disabled=false; $('disconnectBtn').disabled=true;
+ }
+ $('connectBtn').addEventListener('click', () => {
+   const username=$('username').value.trim().replace(/^@/,'');
+   const url=$('gateway').value.trim();
+   if(!username){addEvent('error','Informe o usuário','Digite o nome de usuário do TikTok, com ou sem @.');return;}
+   if(!/^wss?:\/\//i.test(url)){addEvent('error','Gateway inválido','Informe uma URL WebSocket começando com ws:// ou wss://.');return;}
+   disconnect(); setStatus('Conectando…');
+   try {
+     socket=new WebSocket(url);
+     socket.onopen=()=>{setStatus('WebSocket conectado',true);$('connectBtn').disabled=true;$('disconnectBtn').disabled=false;addEvent('system','WebSocket aberto','Transporte conectado. Isso ainda não garante que a LIVE foi autenticada.');socket.send(JSON.stringify({action:'connect',username:username,uniqueId:username}));};
+     socket.onmessage=(event)=>{try{const data=JSON.parse(event.data);if(data?.type==='connected'||data?.status==='connected'){setStatus('LIVE conectada',true);addEvent('system','Gateway confirmou conexão',data.message||'');}else classify(data);}catch{addEvent('message','Mensagem recebida',String(event.data).slice(0,600));}};
+     socket.onerror=()=>{setStatus('Erro de conexão');addEvent('error','Falha no WebSocket','Verifique a URL, o servidor e os logs do gateway.');};
+     socket.onclose=(event)=>{setStatus('Desconectado');$('connectBtn').disabled=false;$('disconnectBtn').disabled=true;socket=null;addEvent('system','Conexão encerrada','Código: '+event.code+(event.reason?' — '+event.reason:''));};
+   } catch(err){setStatus('Erro de conexão');addEvent('error','Não foi possível conectar',err.message);}
+ });
+ $('disconnectBtn').addEventListener('click',disconnect);
+ $('clearBtn').addEventListener('click',()=>{$('events').replaceChildren();const empty=document.createElement('div');empty.id='empty';empty.className='empty';empty.textContent='Eventos limpos. Aguardando novas mensagens.';$('events').append(empty);});
+})();
+</script>
+</body>
+</html>
